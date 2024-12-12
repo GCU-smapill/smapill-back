@@ -22,6 +22,10 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "prescription_id", nullable = false)
     private Prescription prescription;
 
+    //약 명칭
+    @Column(name = "name", nullable = false)
+    private String name;
+
     @Column(name = "schedule_date", nullable = false)
     private LocalDate scheduleDate;
 
@@ -29,4 +33,6 @@ public class Schedule extends BaseEntity {
     @Column(name = "time_of_day")
     private TimeOfDay timeOfDay;
 
+    @Column(name = "is_taken", nullable = false)
+    private boolean isTaken;
 }
