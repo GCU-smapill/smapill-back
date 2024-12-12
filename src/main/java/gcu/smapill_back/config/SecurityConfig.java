@@ -60,7 +60,8 @@ public class SecurityConfig {
                 // 런칭 시 Controller URL 3개 풀기 + anyRequest()는 authenticated()로 두기 (위에 거 주석 처리, 아래 거 주석 해제)
                 .authorizeHttpRequests((request) -> request
                         .requestMatchers("/user/signup/**").permitAll()
-                        .requestMatchers("/user/login/").permitAll()
+                        .requestMatchers("/user/login").permitAll()
+                        .requestMatchers("/prescription/").permitAll()
                         .requestMatchers(
                                 "/v2/api-docs",
                                 "/v3/api-docs/**",
