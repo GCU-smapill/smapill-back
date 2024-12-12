@@ -18,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -28,8 +31,15 @@ public class PrescriptionController {
 
     @PostMapping("/")
     @Operation(summary = "처방전 생성 API", description = "처방전 생성 API")
-    public ApiResponse<PrescriptionResponseDTO.CreatePrescriptionResultDTO> createPrescription(@Valid @RequestBody PrescriptionRequestDTO.CreatePrescriptionDTO request, @RequestHeader("user_id") Long userId) throws Exception {
-        Prescription prescription = prescriptionService.createPrescription(userId, request);
-        return ApiResponse.onSuccess(PrescriptionConverter.toCreateResultDTO(prescription));
+
+    public ApiResponse<List<PrescriptionResponseDTO.CreatePrescriptionResultDTO>> createPrescription(@Valid @RequestBody List<PrescriptionRequestDTO.CreatePrescriptionDTO> requestList, @RequestHeader("user_id") Long userId) throws Exception {
+        List<PrescriptionResponseDTO.CreatePrescriptionResultDTO> resultList = new ArrayList<>();
+
+        for(PrescriptionRequestDTO.CreatePrescriptionDTO request : requestList) {
+            Prescription prescription = prescriptionService.createPrescription(userId, request);
+
+            resultList.add(PrescriptionConverter.toCreateResultDTO(prescription));
+        }
+        return ApiResponse.onSuccess(resultList);
     }
 }

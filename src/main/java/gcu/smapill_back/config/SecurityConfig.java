@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((request) -> request
                         .requestMatchers("/user/signup/**").permitAll()
                         .requestMatchers("/user/login").permitAll()
-                        .requestMatchers("/prescription").permitAll()
+                        .requestMatchers("/prescription/").permitAll()
                         .requestMatchers(
                                 "/v2/api-docs",
                                 "/v3/api-docs/**",
