@@ -6,6 +6,7 @@ import gcu.smapill_back.converter.UserConverter;
 import gcu.smapill_back.domain.Prescription;
 import gcu.smapill_back.domain.User;
 import gcu.smapill_back.service.PrescriptionService;
+import gcu.smapill_back.service.ScheduleService;
 import gcu.smapill_back.service.UserService;
 import gcu.smapill_back.web.dto.PrescriptionRequestDTO;
 import gcu.smapill_back.web.dto.PrescriptionResponseDTO;
@@ -31,15 +32,17 @@ public class PrescriptionController {
 
     @PostMapping("/")
     @Operation(summary = "처방전 생성 API", description = "처방전 생성 API")
-
     public ApiResponse<List<PrescriptionResponseDTO.CreatePrescriptionResultDTO>> createPrescription(@Valid @RequestBody List<PrescriptionRequestDTO.CreatePrescriptionDTO> requestList, @RequestHeader("user_id") Long userId) throws Exception {
         List<PrescriptionResponseDTO.CreatePrescriptionResultDTO> resultList = new ArrayList<>();
 
         for(PrescriptionRequestDTO.CreatePrescriptionDTO request : requestList) {
             Prescription prescription = prescriptionService.createPrescription(userId, request);
-
             resultList.add(PrescriptionConverter.toCreateResultDTO(prescription));
+
+            //처방전 생성시에 복용 스케쥴도 생성
+            prescriptionService.connectToSchedule(userId, prescription.getId());
         }
+
         return ApiResponse.onSuccess(resultList);
     }
 }
