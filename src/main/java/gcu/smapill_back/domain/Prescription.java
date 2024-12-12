@@ -26,7 +26,7 @@ public class Prescription extends BaseEntity {
     private String name;
 
     @Column(name = "dosage")
-    private Double dosage;
+    private String dosage;
 
     @Column(name = "frequency")
     private Integer frequency;
@@ -45,4 +45,9 @@ public class Prescription extends BaseEntity {
 
     @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Schedule> schedules;
+
+    public void setUser(User user) {
+        this.user = user;
+        user.getPrescriptionList().add(this);
+    }
 }

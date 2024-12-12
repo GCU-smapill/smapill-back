@@ -44,7 +44,8 @@ public class User extends BaseEntity {
     private List<UserLink> protectorList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Prescription> prescriptions;
+    @Builder.Default
+    private List<Prescription> prescriptionList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Report> reports;
