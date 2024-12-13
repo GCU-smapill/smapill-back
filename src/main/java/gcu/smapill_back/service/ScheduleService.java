@@ -14,6 +14,7 @@ import gcu.smapill_back.repository.PrescriptionRepository;
 import gcu.smapill_back.repository.ScheduleRepository;
 import gcu.smapill_back.repository.UserRepository;
 import gcu.smapill_back.web.dto.ScheduleRequestDTO;
+import gcu.smapill_back.web.dto.ScheduleResponseDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,7 +26,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -41,9 +44,6 @@ public class ScheduleService {
 
         Prescription prescription = prescriptionRepository.findById(prescriptionId)
                 .orElseThrow(() -> new PrescriptionHandler(ErrorStatus.NO_PRESCRIPTION_EXIST));
-
-        //약 명칭
-        String name = prescription.getName();
 
         //시작 날짜
         LocalDate startDate = prescription.getStartDate();
@@ -68,7 +68,7 @@ public class ScheduleService {
             };
 
             for (TimeOfDay timeOfDay : timeSlots) {
-                Schedule schedule = ScheduleConverter.toSchedule(name, currentDate, timeOfDay, prescription);
+                Schedule schedule = ScheduleConverter.toSchedule(currentDate, timeOfDay, prescription, user);
                 schedules.add(schedule);
             }
         }
@@ -96,5 +96,27 @@ public class ScheduleService {
         schedule.updateSchedule(request.getIsTaken());
 
         return scheduleRepository.save(schedule);
+    }
+
+    public Map<String, Map<String, ScheduleResponseDTO.GetScheduleResultListDTO>> getScheduleList(Long userId, LocalDate scheduleDate) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
+
+
+        TimeOfDay[] timeOfDays = TimeOfDay.values();
+
+        Map<String, Map<String, ScheduleResponseDTO.GetScheduleResultListDTO>> result = new LinkedHashMap<>();
+        Map<String, ScheduleResponseDTO.GetScheduleResultListDTO> dateSchedule = new LinkedHashMap<>();
+
+        for(TimeOfDay timeOfDay : timeOfDays) {
+            List<Schedule> schedules = scheduleRepository.findAllByUserAndScheduleDateAndTimeOfDay(user, scheduleDate, timeOfDay);
+
+            ScheduleResponseDTO.GetScheduleResultListDTO results = ScheduleConverter.toGetScheduleResultListDTO(schedules, timeOfDay);
+            dateSchedule.put(timeOfDay.name(), results);
+        }
+
+        result.put(scheduleDate.toString(), dateSchedule);
+
+        return result;
     }
 }

@@ -24,6 +24,9 @@ public class ScheduleRequestDTO {
 
         @NotNull(message = "복용 시간을 입력하세요")
         private TimeOfDay timeOfDay;
+
+        @NotNull(message = "복용량을 입력하세요")
+        private String dosage;
     }
 
     @Getter

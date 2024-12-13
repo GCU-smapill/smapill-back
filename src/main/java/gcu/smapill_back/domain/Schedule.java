@@ -22,6 +22,10 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "prescription_id", nullable = false)
     private Prescription prescription;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     //약 명칭
     @Column(name = "name", nullable = false)
     private String name;
@@ -35,6 +39,9 @@ public class Schedule extends BaseEntity {
 
     @Column(name = "is_taken", nullable = false)
     private boolean isTaken;
+
+    @Column(name = "dosage", nullable = false)
+    private String dosage;
 
     public void setPrescription(Prescription prescription) {
         this.prescription = prescription;

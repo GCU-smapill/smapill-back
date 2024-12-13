@@ -15,13 +15,16 @@ import gcu.smapill_back.web.dto.ScheduleRequestDTO;
 import gcu.smapill_back.web.dto.ScheduleResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -52,5 +55,13 @@ public class ScheduleController {
     public ApiResponse<ScheduleResponseDTO.UpdateScheduleResultDTO> updateIsTaken(@AuthenticationPrincipal UserDetail userDetail, @RequestBody @Valid ScheduleRequestDTO.UpdateIsTakenDTO request, @PathVariable Long scheduleId) {
         Schedule schedule = scheduleService.updateSchedule(userDetail.getUser().getId(), scheduleId, request);
         return ApiResponse.onSuccess(ScheduleConverter.toUpdateScheduleResultDTO(schedule));
+    }
+
+    @GetMapping("/")
+    @Operation(summary = "복용 일정 조회 API", description = "복용 일정 조회 API(날짜 기반)")
+    public ApiResponse<Map<String, Map<String, ScheduleResponseDTO.GetScheduleResultListDTO>>> getSchedule(@RequestParam @NotNull(message = " 값은 필수 입력 값입니다.") LocalDate scheduleDate,
+                                                                                 @AuthenticationPrincipal UserDetail userDetail) {
+        Map<String, Map<String, ScheduleResponseDTO.GetScheduleResultListDTO>> scheduleList = scheduleService.getScheduleList(userDetail.getUser().getId(), scheduleDate);
+        return ApiResponse.onSuccess(scheduleList);
     }
 }
