@@ -48,6 +48,10 @@ public class Schedule extends BaseEntity {
         prescription.getScheduleList().add(this);
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void updateSchedule(Boolean isTaken) {
         this.isTaken = isTaken;
     }

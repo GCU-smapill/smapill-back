@@ -37,13 +37,13 @@ public class ScheduleController {
 
     @PostMapping
     @Operation(summary = "복용 일정 생성 API", description = "복용 일정 생성 API")
-    public ApiResponse<List<ScheduleResponseDTO.CreateScheduleResultDTO>> createSchedule(@Valid @RequestBody List<ScheduleRequestDTO.CreateScheduleDTO> requestList, @RequestHeader("prescription_id") Long prescriptionId) throws Exception {
+    public ApiResponse<List<ScheduleResponseDTO.CreateScheduleResultDTO>> createSchedule(@Valid @AuthenticationPrincipal UserDetail userDetail, @RequestBody List<ScheduleRequestDTO.CreateScheduleDTO> requestList, @RequestHeader("prescription_id") Long prescriptionId) throws Exception {
         Prescription prescription = prescriptionService.checkPrescription(prescriptionId);
 
         List<ScheduleResponseDTO.CreateScheduleResultDTO> resultList = new ArrayList<>();
 
         for(ScheduleRequestDTO.CreateScheduleDTO request : requestList) {
-            Schedule schedule = scheduleService.createCustomSchedule(request, prescription);
+            Schedule schedule = scheduleService.createCustomSchedule(request, prescription, userDetail.getUser());
             resultList.add(ScheduleConverter.toCreateResultDTO(schedule));
         }
 
