@@ -44,7 +44,7 @@ public class Prescription extends BaseEntity {
     private LocalDate endDate;
 
     @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Schedule> schedules;
+    private List<Schedule> scheduleList;
 
     public void setUser(User user) {
         this.user = user;

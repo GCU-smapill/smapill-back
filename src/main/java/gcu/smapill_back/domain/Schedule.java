@@ -35,4 +35,13 @@ public class Schedule extends BaseEntity {
 
     @Column(name = "is_taken", nullable = false)
     private boolean isTaken;
+
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
+        prescription.getScheduleList().add(this);
+    }
+
+    public void updateSchedule(Boolean isTaken) {
+        this.isTaken = isTaken;
+    }
 }
