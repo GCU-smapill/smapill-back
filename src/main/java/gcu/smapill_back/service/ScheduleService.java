@@ -76,11 +76,14 @@ public class ScheduleService {
         return schedules;
     }
 
-    public Schedule createCustomSchedule(ScheduleRequestDTO.CreateScheduleDTO request, Prescription prescription) {
+    @Transactional
+    public Schedule createCustomSchedule(ScheduleRequestDTO.CreateScheduleDTO request, Prescription prescription, User user) {
 
         Schedule schedule = ScheduleConverter.toScheduleResultDTO(request);
         schedule.setPrescription(prescription);
+        schedule.setUser(user);
 
+        //user.getScheduleList().add(schedule);
         return scheduleRepository.save(schedule);
     }
 
