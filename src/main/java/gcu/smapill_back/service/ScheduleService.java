@@ -2,20 +2,25 @@ package gcu.smapill_back.service;
 
 import gcu.smapill_back.apiPayload.code.status.ErrorStatus;
 import gcu.smapill_back.apiPayload.exception.handler.PrescriptionHandler;
+import gcu.smapill_back.apiPayload.exception.handler.ScheduleHandler;
 import gcu.smapill_back.apiPayload.exception.handler.UserHandler;
+import gcu.smapill_back.converter.PrescriptionConverter;
 import gcu.smapill_back.converter.ScheduleConverter;
 import gcu.smapill_back.domain.Prescription;
 import gcu.smapill_back.domain.Schedule;
 import gcu.smapill_back.domain.User;
 import gcu.smapill_back.domain.enums.TimeOfDay;
 import gcu.smapill_back.repository.PrescriptionRepository;
+import gcu.smapill_back.repository.ScheduleRepository;
 import gcu.smapill_back.repository.UserRepository;
+import gcu.smapill_back.web.dto.ScheduleRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -28,6 +33,7 @@ import java.util.List;
 public class ScheduleService {
     private final UserRepository userRepository;
     private final PrescriptionRepository prescriptionRepository;
+    private final ScheduleRepository scheduleRepository;
 
     public List<Schedule> createSchedules(Long userId, Long prescriptionId) {
         User user = userRepository.findById(userId)
@@ -70,14 +76,25 @@ public class ScheduleService {
         return schedules;
     }
 
-    //약 명칭
-    @Column(name = "name", nullable = false)
-    private String name;
+    public Schedule createCustomSchedule(ScheduleRequestDTO.CreateScheduleDTO request, Prescription prescription) {
 
-    @Column(name = "schedule_date", nullable = false)
-    private LocalDate scheduleDate;
+        Schedule schedule = ScheduleConverter.toScheduleResultDTO(request);
+        schedule.setPrescription(prescription);
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "time_of_day")
-    private TimeOfDay timeOfDay;
+        return scheduleRepository.save(schedule);
+    }
+
+    @Transactional
+    public Schedule updateSchedule(Long userId, Long scheduleId, ScheduleRequestDTO.UpdateIsTakenDTO request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new ScheduleHandler(ErrorStatus.NO_SCHEDULE_EXIST));
+
+
+        schedule.updateSchedule(request.getIsTaken());
+
+        return scheduleRepository.save(schedule);
+    }
 }

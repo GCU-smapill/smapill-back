@@ -1,6 +1,7 @@
 package gcu.smapill_back.service;
 
 import gcu.smapill_back.apiPayload.code.status.ErrorStatus;
+import gcu.smapill_back.apiPayload.exception.handler.PrescriptionHandler;
 import gcu.smapill_back.apiPayload.exception.handler.UserHandler;
 import gcu.smapill_back.converter.PrescriptionConverter;
 import gcu.smapill_back.converter.UserConverter;
@@ -40,6 +41,15 @@ public class PrescriptionService {
         return user;
     }
 
+    public Prescription checkPrescription(Long Prescriptionid){
+        Prescription prescription = prescriptionRepository.findById(Prescriptionid)
+                .orElseThrow(() -> new PrescriptionHandler(ErrorStatus.NO_PRESCRIPTION_EXIST));
+        if(prescription == null){
+            throw new PrescriptionHandler(ErrorStatus.NO_PRESCRIPTION_EXIST);
+        }
+
+        return prescription;
+    }
     @Transactional
     public Prescription createPrescription(Long userId, PrescriptionRequestDTO.CreatePrescriptionDTO request) {
         User user = checkUser(userId);

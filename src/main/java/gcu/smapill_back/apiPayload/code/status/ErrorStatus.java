@@ -20,6 +20,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NO_PRESCRIPTION_EXIST(HttpStatus.NOT_FOUND, "PRESCRIPTION4001", "존재하지 않는 처방전입니다."),
 
+    NO_SCHEDULE_EXIST(HttpStatus.NOT_FOUND, "SCHEDULE4001", "존재하지 않는 스케쥴입니다."),
+
     WRONG_TYPE_SIGNATURE(HttpStatus.UNAUTHORIZED, "USER4011", "잘못된 JWT 서명입니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "USER4012", "토큰이 만료되었습니다."),
     WRONG_TYPE_TOKEN(HttpStatus.UNAUTHORIZED, "USER4013", "지원되지 않는 JWT 토큰입니다."),
