@@ -122,4 +122,16 @@ public class ScheduleService {
 
         return result;
     }
+
+    @Transactional
+    public void deleteSchedule(Long userId, Long scheduleId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
+
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_SCHEDULE_EXIST));
+
+
+        scheduleRepository.delete(schedule);
+    }
 }
