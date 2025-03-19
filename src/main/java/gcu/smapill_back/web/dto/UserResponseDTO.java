@@ -36,5 +36,15 @@ public class UserResponseDTO {
         String email;
         String name;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserUpdateResultDTO {
+        Long userId;
+        LocalDateTime createdAt;
+        String mode;
+    }
 }
 

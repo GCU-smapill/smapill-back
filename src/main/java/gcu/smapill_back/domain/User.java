@@ -33,9 +33,9 @@ public class User extends BaseEntity {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
-    //@Enumerated(EnumType.STRING)
-    //@Column(name="mode", nullable = false)
-    //private ModeStatus mode;
+    @Enumerated(EnumType.STRING)
+    @Column(name="mode", nullable = false)
+    private ModeStatus mode;
 
     @OneToMany(mappedBy = "dependent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserLink> dependentList = new ArrayList<>();
@@ -59,4 +59,6 @@ public class User extends BaseEntity {
     public void encodePassword(String password) {
         this.password = password;
     }
+
+    public void setMode(String mode) { this.mode = ModeStatus.valueOf(mode); }
 }
