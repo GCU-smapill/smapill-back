@@ -46,7 +46,7 @@ public class UserController {
             @Parameter(name = "checkPassword", description = "확인용 비밀번호")
     })
     public ApiResponse<UserResponseDTO> verifyPassword(@RequestParam("password") String password,
-                                                         @RequestParam("checkPassword") String verifyPassword) throws Exception {
+                                                       @RequestParam("checkPassword") String verifyPassword) throws Exception {
         userService.checkPassword(password, verifyPassword);
         return ApiResponse.onSuccess(null);
     }
@@ -61,8 +61,8 @@ public class UserController {
     @PostMapping("/delete")
     @Operation(summary = "회원탈퇴 API", description = "회원탈퇴 API")
     public ApiResponse<UserResponseDTO> deleteMember(@RequestHeader("Authorization") String accessToken,
-                                                       @RequestParam String reason) {
-        userService.withdrawer(reason,accessToken.substring(7));
+                                                     @RequestParam String reason) {
+        userService.withdrawer(reason, accessToken.substring(7));
         userService.logoutUser(accessToken.substring(7));
         return ApiResponse.onSuccess(null);
     }
@@ -72,5 +72,12 @@ public class UserController {
     public ApiResponse<UserResponseDTO.UserDetailResultDTO> getMemberDetail(@AuthenticationPrincipal UserDetail userDetail) {
         String email = userDetail.getUser().getEmail();
         return ApiResponse.onSuccess(userService.getUserDetail(email));
+    }
+
+    @PatchMapping("/mode")
+    @Operation(summary = "유저모드수정 API", description = "유저모드수정 API")
+    public ApiResponse<UserResponseDTO.UserUpdateResultDTO> updateUserMode(@AuthenticationPrincipal UserDetail userDetail, @RequestParam String mode) {
+        User user = userDetail.getUser();
+        return ApiResponse.onSuccess(userService.updateMode(user.getId(), mode));
     }
 }

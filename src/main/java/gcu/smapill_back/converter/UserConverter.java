@@ -22,4 +22,12 @@ public class UserConverter {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+
+    public static UserResponseDTO.UserUpdateResultDTO toUpdateUserResultDTO(User user) {
+        return UserResponseDTO.UserUpdateResultDTO.builder()
+                .userId(user.getId())
+                .createdAt(LocalDateTime.now())
+                .mode(user.getMode().toString())
+                .build();
+    }
 }

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -89,5 +90,20 @@ public class UserService {
                 .name(user.getName())
                 .email(user.getEmail())
                 .createdAt(user.getCreatedAt().toLocalDate()).build();
+    }
+
+    @Transactional
+    public UserResponseDTO.UserUpdateResultDTO updateMode(Long id, String mode) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
+
+        user.setMode(mode);
+        userRepository.save(user);
+
+        return UserResponseDTO.UserUpdateResultDTO.builder()
+                .mode(user.getMode().toString())
+                .userId(user.getId())
+                .createdAt(user.getCreatedAt())
+                .build();
     }
 }
