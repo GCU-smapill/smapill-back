@@ -27,7 +27,6 @@ public enum ErrorStatus implements BaseErrorCode {
     WRONG_TYPE_TOKEN(HttpStatus.UNAUTHORIZED, "USER4013", "지원되지 않는 JWT 토큰입니다."),
     NOT_VALID_TOKEN(HttpStatus.UNAUTHORIZED, "USER4014", "유효한 토큰이 아닙니다.");
 
-
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
