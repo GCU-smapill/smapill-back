@@ -24,4 +24,8 @@ public class Device extends BaseEntity {
 
     @Column(name = "device_ip", nullable = false, length = 40)
     private String deviceIp;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }
