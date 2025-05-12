@@ -57,7 +57,7 @@ smapill-back/
 │       └── resources/
 │           └── application.yml
 
-
+```
 
 ## 🚀 실행 방법
 
