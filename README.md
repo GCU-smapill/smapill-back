@@ -35,31 +35,27 @@
 
 ## 🗂 프로젝트 구조
 
-markdown
-복사
-편집
-## 🗂 프로젝트 구조
-
+```plaintext
 smapill-back/
 ├── .gradle/
 ├── .idea/
 ├── gradle/
 ├── src/
-│ └── main/
-│ ├── java/
-│ │ └── gcu/smapill_back/
-│ │ ├── apiPayload/
-│ │ ├── config/
-│ │ ├── converter/
-│ │ ├── domain/
-│ │ ├── repository/
-│ │ ├── service/
-│ │ ├── web/
-│ │ │ ├── controller/
-│ │ │ └── dto/
-│ │ └── SmapillBackApplication.java
-│ └── resources/
-│ └── application.yml
+│   └── main/
+│       ├── java/
+│       │   └── gcu/smapill_back/
+│       │       ├── apiPayload/
+│       │       ├── config/
+│       │       ├── converter/
+│       │       ├── domain/
+│       │       ├── repository/
+│       │       ├── service/
+│       │       └── web/
+│       │           ├── controller/
+│       │           └── dto/
+│       │       └── SmapillBackApplication.java
+│       └── resources/
+│           └── application.yml
 
 
 
