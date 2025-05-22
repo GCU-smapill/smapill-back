@@ -72,4 +72,11 @@ public class ScheduleController {
         scheduleService.deleteSchedule(userDetail.getUser().getId(), scheduleId);
         return ApiResponse.onSuccess(null);
     }
+
+    @DeleteMapping("/")
+    @Operation(summary = "복용 일정 전체 삭제 API", description = "복용 일정 전체 삭제 API")
+    public ApiResponse<?> deleteAllSchedule(@AuthenticationPrincipal UserDetail userDetail){
+        scheduleService.deleteAllSchedule(userDetail.getUser().getId());
+        return ApiResponse.onSuccess(null);
+    }
 }

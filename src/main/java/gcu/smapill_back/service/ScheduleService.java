@@ -134,4 +134,13 @@ public class ScheduleService {
 
         scheduleRepository.delete(schedule);
     }
+
+    @Transactional
+    public void deleteAllSchedule(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
+
+        List<Schedule> schedules = scheduleRepository.findAllByUser(user);
+        scheduleRepository.deleteAll(schedules);
+    }
 }
