@@ -19,7 +19,7 @@ public class Schedule extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "prescription_id", nullable = false)
+    @JoinColumn(name = "prescription_id")
     private Prescription prescription;
 
     @ManyToOne

@@ -77,14 +77,24 @@ public class ScheduleService {
     }
 
     @Transactional
-    public Schedule createCustomSchedule(ScheduleRequestDTO.CreateScheduleDTO request, Prescription prescription, User user) {
+    public List<Schedule> createCustomSchedule(ScheduleRequestDTO.CreateScheduleDTO request, User user) {
 
-        Schedule schedule = ScheduleConverter.toScheduleResultDTO(request);
-        schedule.setPrescription(prescription);
-        schedule.setUser(user);
+        List<Schedule> schedules = new ArrayList<>();
+        LocalDate startDate = request.getStartDate();
+        LocalDate endDate = request.getEndDate();
 
-        //user.getScheduleList().add(schedule);
-        return scheduleRepository.save(schedule);
+        if (endDate.isBefore(startDate)) {
+            throw new ScheduleHandler(ErrorStatus.INVALID_DATA_RANGE);
+        }
+
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            for (TimeOfDay time : request.getIntakeTimes()) {
+                Schedule schedule = ScheduleConverter.toCustomSchedule(request.getName(), date, time, request.getDosage(), user);
+                schedules.add(schedule);
+            }
+        }
+
+        return scheduleRepository.saveAll(schedules);
     }
 
     @Transactional
