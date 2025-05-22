@@ -7,12 +7,14 @@ import gcu.smapill_back.converter.UserLinkConverter;
 import gcu.smapill_back.domain.User;
 import gcu.smapill_back.domain.mapping.UserLink;
 import gcu.smapill_back.service.UserLinkService;
+import gcu.smapill_back.web.dto.UserLinkRequestDTO;
 import gcu.smapill_back.web.dto.UserLinkResponseDTO;
 import gcu.smapill_back.web.dto.UserRequestDTO;
 import gcu.smapill_back.web.dto.UserResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +27,11 @@ import java.util.List;
 @RequestMapping("/userLink")
 public class UserLinkController {
     private final UserLinkService userLinkService;
+
     @PostMapping("/")
     @Operation(summary = "사용자 연동 API", description = "사용자 연동 API")
-    public ApiResponse<UserLinkResponseDTO.UserLinkJoinResultDTO> joinUserLink(@Valid @RequestParam("dependentId") Long dependentId, @RequestParam("protectorId") Long protectorId) throws Exception {
-        UserLink userLink = userLinkService.joinUserLink(dependentId, protectorId);
+    public ApiResponse<UserLinkResponseDTO.UserLinkJoinResultDTO> joinUserLink(@AuthenticationPrincipal UserDetail userDetail, @RequestBody @Valid UserLinkRequestDTO.UserLinkJoinDTO request) throws Exception {
+        UserLink userLink = userLinkService.joinUserLink(userDetail.getUser().getId(), request);
         return ApiResponse.onSuccess(UserLinkConverter.toJoinResultDTO(userLink));
     }
 
