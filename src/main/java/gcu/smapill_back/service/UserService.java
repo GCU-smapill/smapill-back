@@ -18,12 +18,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -47,16 +47,16 @@ public class UserService {
     }
 
     public UserResponseDTO.LoginJwtTokenDTO loginUser(UserRequestDTO.UserLoginDTO loginDTO) {
-        String email = loginDTO.getEmail();
+        String userId = loginDTO.getUserId();
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
 
         if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
             throw new UserHandler(ErrorStatus.PASSWORD_NOT_MATCH);
         }
 
-        String accessToken = JwtUtil.createAccessToken(user.getId(), user.getEmail());
+        String accessToken = JwtUtil.createAccessToken(user.getId(), user.getUserId());
 
         return UserResponseDTO.LoginJwtTokenDTO.builder()
                 .grantType("Bearer")
@@ -75,20 +75,20 @@ public class UserService {
     }
 
     public void withdrawer(String reason, String accessToken) {
-        String email = jwtUtil.getEmail(accessToken);
+        String userId = jwtUtil.getUserId(accessToken);
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
 
         userRepository.delete(user);
     }
 
-    public UserResponseDTO.UserDetailResultDTO getUserDetail(String email) {
-        User user = userRepository.findByEmail(email)
+    public UserResponseDTO.UserDetailResultDTO getUserDetail(String userId) {
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
         return UserResponseDTO.UserDetailResultDTO.builder()
                 .name(user.getName())
-                .email(user.getEmail())
+                .userId(user.getUserId())
                 .createdAt(user.getCreatedAt().toLocalDate()).build();
     }
 

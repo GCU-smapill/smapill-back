@@ -44,25 +44,25 @@ public class UserLinkService {
         return userLinkRepository.save(newUserLink);
     }
 
-    public List<Long> getProtectorDetail(Long userId) {
-        User user = userRepository.findById(userId)
+    public List<UserResponseDTO.UserProtectorDetailDTO> getProtectorDetail(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
 
-        List<UserLink> protectorList = userLinkRepository.findAllByProtectorId(userId);
+        List<UserLink> protectorList = userLinkRepository.findAllByProtectorId(id);
 
         return protectorList.stream()
-                .map(userLink -> userLink.getProtector().getId()) // protector 객체에서 id 꺼냄
+                .map(userLink -> UserConverter.toProtectorDetail(userLink.getProtector()))
                 .collect(Collectors.toList());
     }
 
-    public List<Long> getDependentDetail(Long userId) {
-        User user = userRepository.findById(userId)
+    public List<UserResponseDTO.UserDependentDetailDTO> getDependentDetail(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
 
-        List<UserLink> dependentList = userLinkRepository.findAllByDependentId(userId);
+        List<UserLink> dependentList = userLinkRepository.findAllByDependentId(user.getId());
 
         return dependentList.stream()
-                .map(userLink -> userLink.getDependent().getId()) // dependent 객체에서 id 꺼냄
+                .map(userLink -> UserConverter.toDependentDetail(userLink.getDependent()))
                 .collect(Collectors.toList());
     }
 }

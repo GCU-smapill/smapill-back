@@ -19,11 +19,11 @@ public class UserDetailService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 
         log.info("loadUserByUsername 함수 실행");
 
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findByUserId(userId);
         if (user.isEmpty()) throw new UsernameNotFoundException("해당 유저를 찾을 수 없습니다.");
         return UserDetail.createUserDetail(user.get());
     }

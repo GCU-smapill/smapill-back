@@ -70,8 +70,8 @@ public class UserController {
     @GetMapping("/")
     @Operation(summary = "회원정보조회 API", description = "회원정보조회 API")
     public ApiResponse<UserResponseDTO.UserDetailResultDTO> getMemberDetail(@AuthenticationPrincipal UserDetail userDetail) {
-        String email = userDetail.getUser().getEmail();
-        return ApiResponse.onSuccess(userService.getUserDetail(email));
+        String userId = userDetail.getUser().getUserId();
+        return ApiResponse.onSuccess(userService.getUserDetail(userId));
     }
 
     @PatchMapping("/mode")
