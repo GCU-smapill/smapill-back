@@ -46,4 +46,12 @@ public class UserLinkController {
     public ApiResponse<List<UserResponseDTO.UserDependentDetailDTO>> getDependentDetail(@AuthenticationPrincipal UserDetail userDetail) {
         return ApiResponse.onSuccess(userLinkService.getDependentDetail(userDetail.getUser().getId()));
     }
+
+    @DeleteMapping("/dependent/{dependentId}")
+    @Operation(summary = "피보호자 삭제 API", description = "피보호자 삭제 API")
+    public ApiResponse<?> deleteDependent(@PathVariable Long dependentId,
+                                         @AuthenticationPrincipal UserDetail userDetail){
+        userLinkService.deleteDependent(userDetail.getUser().getId(), dependentId);
+        return ApiResponse.onSuccess(null);
+    }
 }

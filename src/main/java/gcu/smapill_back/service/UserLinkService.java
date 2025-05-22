@@ -6,6 +6,7 @@ import gcu.smapill_back.apiPayload.exception.handler.UserLinkHandler;
 import gcu.smapill_back.config.jwt.JwtUtil;
 import gcu.smapill_back.converter.UserConverter;
 import gcu.smapill_back.converter.UserLinkConverter;
+import gcu.smapill_back.domain.Schedule;
 import gcu.smapill_back.domain.User;
 import gcu.smapill_back.domain.mapping.UserLink;
 import gcu.smapill_back.repository.UserLinkRepository;
@@ -92,5 +93,19 @@ public class UserLinkService {
         return dependentList.stream()
                 .map(userLink -> UserConverter.toDependentDetail(userLink.getDependent()))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteDependent(Long protectorId, Long dependentId) {
+        User protector = userRepository.findById(protectorId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
+
+        User dependent = userRepository.findById(dependentId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
+
+        UserLink userLink = userLinkRepository.findByProtectorIdAndDependentId(protectorId, dependentId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_LINK_EXIST));
+
+        userLinkRepository.delete(userLink);
     }
 }

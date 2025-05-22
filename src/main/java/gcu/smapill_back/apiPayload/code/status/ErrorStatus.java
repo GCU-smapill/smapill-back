@@ -20,6 +20,8 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NO_PRESCRIPTION_EXIST(HttpStatus.NOT_FOUND, "PRESCRIPTION4001", "존재하지 않는 처방전입니다."),
 
+    NO_USER_LINK_EXIST(HttpStatus.NOT_FOUND, "USERLINK4001", "존재하지 않는 연동정보입니다."),
+
     NO_SCHEDULE_EXIST(HttpStatus.NOT_FOUND, "SCHEDULE4001", "존재하지 않는 스케쥴입니다."),
 
     WRONG_TYPE_SIGNATURE(HttpStatus.UNAUTHORIZED, "USER4011", "잘못된 JWT 서명입니다."),
