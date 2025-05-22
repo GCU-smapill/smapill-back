@@ -14,7 +14,8 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserJoinResultDTO {
-        Long userId;
+        Long id;
+        String userId;
         LocalDateTime createdAt;
     }
 
@@ -33,7 +34,7 @@ public class UserResponseDTO {
     @AllArgsConstructor
     public static class UserDetailResultDTO {
         LocalDate createdAt;
-        String email;
+        String userId;
         String name;
     }
 
@@ -45,6 +46,26 @@ public class UserResponseDTO {
         Long userId;
         LocalDateTime createdAt;
         String mode;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserProtectorDetailDTO {
+        Long id;
+        String userId;
+        String name;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserDependentDetailDTO {
+        Long id;
+        String userId;
+        String name;
     }
 }
 

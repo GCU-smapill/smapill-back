@@ -10,6 +10,14 @@ public class UserRequestDTO {
     @Getter
     public static class UserJoinDTO {
 
+        @NotNull(message = "아이디를 입력하세요")
+        @Length(max = 40)
+        @Pattern(
+                regexp = "^[a-zA-Z0-9]{8,20}",
+                message = "아이디는 8~20자의 영어 혹은 숫자의 조합으로 입력해주세요"
+        )
+        private String userId;
+
         @NotNull(message = "이름을 입력하세요")
         @Length(max = 20)
         @Pattern(
@@ -38,12 +46,12 @@ public class UserRequestDTO {
     @Getter
     public static class UserLoginDTO {
 
-        @NotBlank(message = "이메일을 입력하세요")
+        @NotBlank(message = "아이디를 입력하세요")
         @Pattern(
-                regexp = "\\w+@\\w+\\.\\w+(\\.\\w+)?",
-                message = "이메일 형식을 올바르게 입력해주세"
+                regexp = "^[a-zA-Z0-9]{8,20}",
+                message = "아이디는 영어, 숫자의 조합으로만 구성되어야 합니다"
         )
-        private String email;
+        private String userId;
 
         @NotBlank(message = "비밀번호를 입력하세요")
         @Length(min = 8, max = 20)

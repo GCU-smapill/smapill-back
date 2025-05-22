@@ -37,13 +37,13 @@ public class JwtUtil implements InitializingBean {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
-    public static String createAccessToken(Long userId, String email) {
+    public static String createAccessToken(Long id, String userId) {
         return Jwts.builder()
                 .header()
                 .add("typ", "JWT")
                 .and()
+                .claim("id", id)
                 .claim("userId", userId)
-                .claim("email", email)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .signWith(secretKey)
                 .compact();
@@ -83,16 +83,16 @@ public class JwtUtil implements InitializingBean {
     }
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailService.loadUserByUsername(this.getEmail(token));
+        UserDetails userDetails = userDetailService.loadUserByUsername(this.getUserId(token));
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
-    public static String getEmail(String token) {
+    public static String getUserId(String token) {
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("email", String.class);
+                .get("userId", String.class);
     }
 }

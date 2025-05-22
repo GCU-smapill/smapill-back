@@ -34,13 +34,13 @@ public class UserLinkController {
 
     @GetMapping("/protector")
     @Operation(summary = "보호자 조회 API", description = "보호자 조회 API")
-    public ApiResponse<List<Long>> getProtectorDetail(@AuthenticationPrincipal UserDetail userDetail) {
+    public ApiResponse<List<UserResponseDTO.UserProtectorDetailDTO>> getProtectorDetail(@AuthenticationPrincipal UserDetail userDetail) {
         return ApiResponse.onSuccess(userLinkService.getProtectorDetail(userDetail.getUser().getId()));
     }
 
     @GetMapping("/dependent")
     @Operation(summary = "피보호자 조회 API", description = "피보호자 조회 API")
-    public ApiResponse<List<Long>> getDependentDetail(@AuthenticationPrincipal UserDetail userDetail) {
+    public ApiResponse<List<UserResponseDTO.UserDependentDetailDTO>> getDependentDetail(@AuthenticationPrincipal UserDetail userDetail) {
         return ApiResponse.onSuccess(userLinkService.getDependentDetail(userDetail.getUser().getId()));
     }
 }
