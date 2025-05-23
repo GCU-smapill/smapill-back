@@ -29,6 +29,18 @@ public class ScheduleConverter {
                 .build();
     }
 
+    public static Schedule toCustomSchedule(String name, LocalDate date, TimeOfDay time, String dosage, User user) {
+        return Schedule.builder()
+                .name(name)
+                .scheduleDate(date)
+                .timeOfDay(time)
+                .dosage(dosage)
+                .prescription(null)
+                .user(user)
+                .build();
+    }
+
+    /*
     public static Schedule toScheduleResultDTO(ScheduleRequestDTO.CreateScheduleDTO request) {
         return Schedule.builder()
                 .name(request.getName())
@@ -37,11 +49,20 @@ public class ScheduleConverter {
                 .dosage(request.getDosage())
                 .build();
     }
+*/
 
-    public static ScheduleResponseDTO.CreateScheduleResultDTO toCreateResultDTO(Schedule schedule) {
-        return ScheduleResponseDTO.CreateScheduleResultDTO.builder()
-                .scheduleId(schedule.getId())
-                .createdAt(LocalDateTime.now())
+    // Removed incorrect method: toCreateResultDTO(List<Schedule> schedules)
+
+    public static ScheduleResponseDTO.CreateScheduleResultListDTO toCreateResultListDTO(List<Schedule> schedules) {
+        List<ScheduleResponseDTO.CreateScheduleResultDTO> resultDTOs = schedules.stream()
+                .map(schedule -> ScheduleResponseDTO.CreateScheduleResultDTO.builder()
+                        .scheduleId(schedule.getId())
+                        .createdAt(schedule.getCreatedAt())
+                        .build())
+                .collect(Collectors.toList());
+
+        return ScheduleResponseDTO.CreateScheduleResultListDTO.builder()
+                .schedules(resultDTOs)
                 .build();
     }
 

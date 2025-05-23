@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ScheduleRequestDTO {
     @Getter
@@ -19,11 +20,14 @@ public class ScheduleRequestDTO {
         @Length(max = 40)
         private String name;
 
-        @NotNull(message = "복용 날짜를 입력하세요")
-        private LocalDate scheduleDate;
+        @NotNull(message = "복용 시작 날짜를 입력하세요")
+        private LocalDate startDate;
+
+        @NotNull(message = "복용 종료 날짜를 입력하세요")
+        private LocalDate endDate;
 
         @NotNull(message = "복용 시간을 입력하세요")
-        private TimeOfDay timeOfDay;
+        private List<TimeOfDay> intakeTimes;
 
         @NotNull(message = "복용량을 입력하세요")
         private String dosage;

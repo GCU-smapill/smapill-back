@@ -10,6 +10,8 @@ import org.hibernate.validator.constraints.Length;
 
 public class UserLinkRequestDTO {
     @Getter
-    public static class UserJoinDTO {
+    public static class UserLinkJoinDTO {
+        String userId;
+        String password;
     }
 }

@@ -24,6 +24,14 @@ public class ScheduleResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class CreateScheduleResultListDTO {
+        List<CreateScheduleResultDTO> schedules;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class UpdateScheduleResultDTO {
         Long scheduleId;
         Boolean isTaken;

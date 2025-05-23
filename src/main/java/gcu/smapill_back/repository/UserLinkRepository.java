@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserLinkRepository extends JpaRepository<UserLink, Long> {
     List<UserLink> findAllByProtectorId(Long protectorId);
     List<UserLink> findAllByDependentId(Long dependentId);
+    Optional<UserLink> findByProtectorIdAndDependentId(Long protectorId, Long dependentId);
 }
