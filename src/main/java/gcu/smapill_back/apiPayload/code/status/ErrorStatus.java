@@ -21,6 +21,7 @@ public enum ErrorStatus implements BaseErrorCode {
     NO_PRESCRIPTION_EXIST(HttpStatus.NOT_FOUND, "PRESCRIPTION4001", "존재하지 않는 처방전입니다."),
 
     NO_USER_LINK_EXIST(HttpStatus.NOT_FOUND, "USERLINK4001", "존재하지 않는 연동정보입니다."),
+    USER_LINK_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "USERLINK4002", "이미 존재하는 연동정보입니다."),
 
     NO_SCHEDULE_EXIST(HttpStatus.NOT_FOUND, "SCHEDULE4001", "존재하지 않는 스케쥴입니다."),
     INVALID_DATA_RANGE(HttpStatus.BAD_REQUEST, "SCHEDULE 4002", "스케쥴 범위가 유효하지 않습니다."),
@@ -29,6 +30,8 @@ public enum ErrorStatus implements BaseErrorCode {
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "USER4012", "토큰이 만료되었습니다."),
     WRONG_TYPE_TOKEN(HttpStatus.UNAUTHORIZED, "USER4013", "지원되지 않는 JWT 토큰입니다."),
     NOT_VALID_TOKEN(HttpStatus.UNAUTHORIZED, "USER4014", "유효한 토큰이 아닙니다.");
+
+
 
     private final HttpStatus httpStatus;
     private final String code;
