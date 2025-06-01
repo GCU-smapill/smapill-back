@@ -56,6 +56,7 @@ public class UserResponseDTO {
         Long id;
         String userId;
         String name;
+        String phoneNumber;
     }
 
     @Builder
@@ -66,6 +67,7 @@ public class UserResponseDTO {
         Long id;
         String userId;
         String name;
+        String phoneNumber;
     }
 }
 
