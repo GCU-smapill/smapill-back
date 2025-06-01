@@ -57,6 +57,9 @@ public class ScheduleConverter {
         List<ScheduleResponseDTO.CreateScheduleResultDTO> resultDTOs = schedules.stream()
                 .map(schedule -> ScheduleResponseDTO.CreateScheduleResultDTO.builder()
                         .scheduleId(schedule.getId())
+                        .date(schedule.getScheduleDate())
+                        .intakeTime(schedule.getTimeOfDay())
+                        .name(schedule.getName())
                         .createdAt(schedule.getCreatedAt())
                         .build())
                 .collect(Collectors.toList());

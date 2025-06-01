@@ -1,11 +1,12 @@
-spring:
-    profiles:
-        active: secret
+server:
+    port: 8080
+    address: 0.0.0.0
 
+spring:
     datasource:
-        url: ${mysql.url}
-        username: ${mysql.username}
-        password: ${mysql.password}
+        url: jdbc:mysql://localhost:3306/smapill # 여기서 smapill은 본인 mysql db이름으로
+        username: root
+        password: 12345678 #본인 mysql 비밀번호
         driver-class-name: com.mysql.cj.jdbc.Driver
 
     jpa:
@@ -23,11 +24,11 @@ spring:
                         format_sql: true
     data:
         redis:
-            host: ${redis.host}
-            port: ${redis.port}
+            host: localhost
+            port: 6379
 
     cache:
         type: redis
 
     jwt:
-        secret: ${jwt.secret}
+        secret: b41d7e84373bda2b756c67514edca7df468b9aa9f7f3b448e43d24085de0377e84a2b3c3edb6f51a4c57de7c7bb7fb7bb216d763e7229b2f267e476b2e1cf1f3

@@ -41,6 +41,9 @@ public class UserRequestDTO {
         )
         @Length(min = 8, max = 20)
         private String password;
+
+        @Length(min = 6, max = 20)
+        private String phoneNumber;
     }
 
     @Getter

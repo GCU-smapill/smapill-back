@@ -17,6 +17,9 @@ public class ScheduleResponseDTO {
     @AllArgsConstructor
     public static class CreateScheduleResultDTO {
         Long scheduleId;
+        String name;
+        LocalDate date;
+        TimeOfDay intakeTime;
         LocalDateTime createdAt;
     }
 

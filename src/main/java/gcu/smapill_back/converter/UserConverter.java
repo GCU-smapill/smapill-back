@@ -16,6 +16,7 @@ public class UserConverter {
                 .email(request.getEmail())
                 .mode(ModeStatus.NORMAL)
                 .userId(request.getUserId())
+                .phoneNumber(request.getPhoneNumber())
                 .build();
     }
 
@@ -40,6 +41,7 @@ public class UserConverter {
                 .id(user.getId())
                 .userId(user.getUserId())
                 .name(user.getName())
+                .phoneNumber(user.getPhoneNumber())
                 .build();
     }
 
@@ -48,6 +50,7 @@ public class UserConverter {
                 .id(user.getId())
                 .userId(user.getUserId())
                 .name(user.getName())
+                .phoneNumber(user.getPhoneNumber())
                 .build();
 
     }
