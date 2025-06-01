@@ -45,8 +45,15 @@ public class UserLinkService {
         User dependent = userRepository.findByUserId(request.getUserId())
                 .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
 
+        //비밀번호 불일치 검증
         if (!passwordEncoder.matches(request.getPassword(), dependent.getPassword())) {
             throw new UserHandler(ErrorStatus.PASSWORD_NOT_MATCH);
+        }
+
+        // 이미 연결된 관계인지 확인
+        boolean exists = userLinkRepository.findByProtectorIdAndDependentId(protector.getId(), dependent.getId()).isPresent();
+        if (exists) {
+            throw new UserLinkHandler(ErrorStatus.USER_LINK_ALREADY_EXISTS);
         }
 
         UserLink newUserLink = UserLinkConverter.toUserLinkResultDTO(dependent, protector);
