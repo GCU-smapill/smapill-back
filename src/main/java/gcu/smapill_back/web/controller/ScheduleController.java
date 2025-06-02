@@ -14,6 +14,7 @@ import gcu.smapill_back.web.dto.PrescriptionResponseDTO;
 import gcu.smapill_back.web.dto.ScheduleRequestDTO;
 import gcu.smapill_back.web.dto.ScheduleResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -35,41 +36,41 @@ public class ScheduleController {
     private final PrescriptionService prescriptionService;
     private final ScheduleRepository scheduleRepository;
 
-    @PostMapping
+    @PostMapping("/users/{userId}")
     @Operation(summary = "복용 일정 생성 API", description = "복용 일정 생성 API")
-    public ApiResponse<ScheduleResponseDTO.CreateScheduleResultListDTO> createSchedule(@Valid @AuthenticationPrincipal UserDetail userDetail, @RequestBody ScheduleRequestDTO.CreateScheduleDTO request) throws Exception {
-        List<Schedule> schedules = scheduleService.createCustomSchedule(request, userDetail.getUser());
+    public ApiResponse<ScheduleResponseDTO.CreateScheduleResultListDTO> createSchedule(@Parameter(description = "유저 ID", example = "1") @PathVariable Long userId, @Valid @RequestBody ScheduleRequestDTO.CreateScheduleDTO request) throws Exception {
+        List<Schedule> schedules = scheduleService.createCustomSchedule(request, userId);
 
         return ApiResponse.onSuccess(ScheduleConverter.toCreateResultListDTO(schedules));
     }
 
-    @PatchMapping("/{scheduleId}")
+    @PatchMapping("/{scheduleId}/users/{userId}")
     @Operation(summary = "복용 상태 수정 API", description = "복용 여부를 수정하는 API")
-    public ApiResponse<ScheduleResponseDTO.UpdateScheduleResultDTO> updateIsTaken(@AuthenticationPrincipal UserDetail userDetail, @RequestBody @Valid ScheduleRequestDTO.UpdateIsTakenDTO request, @PathVariable Long scheduleId) {
-        Schedule schedule = scheduleService.updateSchedule(userDetail.getUser().getId(), scheduleId, request);
+    public ApiResponse<ScheduleResponseDTO.UpdateScheduleResultDTO> updateIsTaken(@Parameter(description = "유저 ID", example = "1") @PathVariable Long userId, @RequestBody @Valid ScheduleRequestDTO.UpdateIsTakenDTO request, @Parameter(description = "스케쥴 ID", example = "1") @PathVariable Long scheduleId) {
+        Schedule schedule = scheduleService.updateSchedule(userId, scheduleId, request);
         return ApiResponse.onSuccess(ScheduleConverter.toUpdateScheduleResultDTO(schedule));
     }
 
-    @GetMapping("/")
+    @GetMapping("/users/{userId}")
     @Operation(summary = "복용 일정 조회 API", description = "복용 일정 조회 API(날짜 기반)")
-    public ApiResponse<Map<String, Map<String, ScheduleResponseDTO.GetScheduleResultListDTO>>> getSchedule(@RequestParam @NotNull(message = " 값은 필수 입력 값입니다.") LocalDate scheduleDate,
-                                                                                 @AuthenticationPrincipal UserDetail userDetail) {
-        Map<String, Map<String, ScheduleResponseDTO.GetScheduleResultListDTO>> scheduleList = scheduleService.getScheduleList(userDetail.getUser().getId(), scheduleDate);
+    public ApiResponse<Map<String, Map<String, ScheduleResponseDTO.GetScheduleResultListDTO>>> getSchedule(@Parameter(description = "스케쥴 검색 날짜", example = "2025-06-02") @RequestParam @NotNull(message = " 값은 필수 입력 값입니다.") LocalDate scheduleDate,
+                                                                                                           @Parameter(description = "유저 ID", example = "1") @PathVariable Long userId) {
+        Map<String, Map<String, ScheduleResponseDTO.GetScheduleResultListDTO>> scheduleList = scheduleService.getScheduleList(userId, scheduleDate);
         return ApiResponse.onSuccess(scheduleList);
     }
 
-    @DeleteMapping("/{scheduleId}")
+    @DeleteMapping("/{scheduleId}/users/{userId}")
     @Operation(summary = "복용 일정 삭제 API", description = "복용 일정 삭제 API")
-    public ApiResponse<?> deleteSchedule(@PathVariable Long scheduleId,
-                                       @AuthenticationPrincipal UserDetail userDetail){
-        scheduleService.deleteSchedule(userDetail.getUser().getId(), scheduleId);
+    public ApiResponse<?> deleteSchedule(@Parameter(description = "스케쥴 ID", example = "1") @PathVariable Long scheduleId,
+                                         @Parameter(description = "유저 ID", example = "1") @PathVariable Long userId){
+        scheduleService.deleteSchedule(userId, scheduleId);
         return ApiResponse.onSuccess(null);
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/users/{userId}")
     @Operation(summary = "복용 일정 전체 삭제 API", description = "복용 일정 전체 삭제 API")
-    public ApiResponse<?> deleteAllSchedule(@AuthenticationPrincipal UserDetail userDetail){
-        scheduleService.deleteAllSchedule(userDetail.getUser().getId());
+    public ApiResponse<?> deleteAllSchedule(@Parameter(description = "유저 ID", example = "1") @PathVariable Long userId){
+        scheduleService.deleteAllSchedule(userId);
         return ApiResponse.onSuccess(null);
     }
 }
