@@ -7,6 +7,7 @@ import gcu.smapill_back.config.jwt.JwtUtil;
 import gcu.smapill_back.converter.UserConverter;
 import gcu.smapill_back.domain.User;
 import gcu.smapill_back.repository.UserRepository;
+import gcu.smapill_back.repository.UserLinkRepository;
 import gcu.smapill_back.web.dto.UserRequestDTO;
 import gcu.smapill_back.web.dto.UserResponseDTO;
 import io.jsonwebtoken.JwtException;
@@ -25,6 +26,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserLinkRepository userLinkRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final RedisTemplate redisTemplate;
@@ -74,12 +76,18 @@ public class UserService {
         redisTemplate.opsForValue().set(accessToken, "logout");
     }
 
+    @Transactional
     public void withdrawer(String reason, String accessToken) {
         String userId = jwtUtil.getUserId(accessToken);
 
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
 
+        // 유저와 연관된 userLink 삭제 (JPQL bulk delete)
+        userLinkRepository.deleteAllByProtectorUserId(userId);
+        userLinkRepository.deleteAllByDependentUserId(userId);
+
+        // 유저 삭제
         userRepository.delete(user);
     }
 
