@@ -15,10 +15,10 @@ public interface UserLinkRepository extends JpaRepository<UserLink, Long> {
     Optional<UserLink> findByProtectorIdAndDependentId(Long protectorId, Long dependentId);
 
     @Modifying
-    @Query("DELETE FROM UserLink ul WHERE ul.protector.userId = :userId")
-    void deleteAllByProtectorUserId(@Param("userId") String userId);
+    @Query("DELETE FROM UserLink ul WHERE ul.protector.id = :id")
+    void deleteAllByProtectorId(@Param("id") Long id);
 
     @Modifying
-    @Query("DELETE FROM UserLink ul WHERE ul.dependent.userId = :userId")
-    void deleteAllByDependentUserId(@Param("userId") String userId);
+    @Query("DELETE FROM UserLink ul WHERE ul.dependent.id = :id")
+    void deleteAllByDependentId(@Param("id") Long id);
 }
