@@ -6,6 +6,7 @@ import gcu.smapill_back.web.dto.UserRequestDTO;
 import gcu.smapill_back.web.dto.UserResponseDTO;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
@@ -53,5 +54,16 @@ public class UserConverter {
                 .phoneNumber(user.getPhoneNumber())
                 .build();
 
+    }
+
+    public static UserResponseDTO.UserDetailResultDTO toGetUserDetail(User user) {
+        return UserResponseDTO.UserDetailResultDTO.builder()
+                .id(user.getId())
+                .userId(user.getUserId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .createdAt(user.getCreatedAt())
+                .build();
     }
 }
