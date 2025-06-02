@@ -77,7 +77,9 @@ public class ScheduleService {
     }
 
     @Transactional
-    public List<Schedule> createCustomSchedule(ScheduleRequestDTO.CreateScheduleDTO request, User user) {
+    public List<Schedule> createCustomSchedule(ScheduleRequestDTO.CreateScheduleDTO request, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
 
         List<Schedule> schedules = new ArrayList<>();
         LocalDate startDate = request.getStartDate();

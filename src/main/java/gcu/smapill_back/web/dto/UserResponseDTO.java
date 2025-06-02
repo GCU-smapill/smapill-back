@@ -33,9 +33,12 @@ public class UserResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class UserDetailResultDTO {
-        LocalDate createdAt;
+        Long id;
         String userId;
         String name;
+        String email;
+        String phoneNumber;
+        LocalDateTime createdAt;
     }
 
     @Builder

@@ -77,27 +77,24 @@ public class UserService {
     }
 
     @Transactional
-    public void withdrawer(String reason, String accessToken) {
-        String userId = jwtUtil.getUserId(accessToken);
-
-        User user = userRepository.findByUserId(userId)
+    public void withdrawer(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
 
         // 유저와 연관된 userLink 삭제 (JPQL bulk delete)
-        userLinkRepository.deleteAllByProtectorUserId(userId);
-        userLinkRepository.deleteAllByDependentUserId(userId);
+        userLinkRepository.deleteAllByProtectorId(id);
+        userLinkRepository.deleteAllByDependentId(id);
 
         // 유저 삭제
         userRepository.delete(user);
     }
 
+
+
     public UserResponseDTO.UserDetailResultDTO getUserDetail(String userId) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserHandler(ErrorStatus.NO_USER_EXIST));
-        return UserResponseDTO.UserDetailResultDTO.builder()
-                .name(user.getName())
-                .userId(user.getUserId())
-                .createdAt(user.getCreatedAt().toLocalDate()).build();
+        return UserConverter.toGetUserDetail(user);
     }
 
     @Transactional
